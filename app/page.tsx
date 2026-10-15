@@ -1,19 +1,17 @@
 import Image from "next/image";
-import ProductCard from "../components/productCard";
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-[750px] h-[750px] bg-pink-500 relative">
+      <div className="w-[650px] h-[650px] bg-yellow-500 flex justify-center items-center">
+        
+        <div className="w-[120px] h-[120px] bg-red-500 " > </div>
+        <div className="w-[120px] h-[120px] bg-blue-500" > </div>
+        <div className="w-[120px] h-[120px] bg-green-500 fixed bottom-[5px] right-[5px]" > </div>
+        <div className="w-[120px] h-[120px] bg-purple-500 absolute bottom-[5px] right-[5px]" > </div>
+        <div className="w-[120px] h-[120px] bg-white" > </div>
 
-      <ProductCard name="Apple iPhone" price="LKR 25,000" imageURL="https://picsum.photos/id/3/200/300" />
-
-      <ProductCard name="MacBook Air" price="LKR 55,000" imageURL="https://picsum.photos/id/1/200/300" />
-
-      <ProductCard name="Forks set" price="LKR 1,000" imageURL="https://picsum.photos/id/23/200/300">\
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae, cum.</p>
-        <h1>Test</h1>
-      </ProductCard>
-
+      </div>
     </div>
   );
 }
