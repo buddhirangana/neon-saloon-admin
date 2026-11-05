@@ -1,177 +1,190 @@
+"use client";
 import toast from "react-hot-toast";
+import {
+	Table,
+	TableBody,
+	TableCaption,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 
-const sampleVideo =
-  "https://developer.mozilla.org/shared-assets/videos/flower.mp4";
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
+import { useSearchParams } from "next/navigation";
 
-export const products = [
-  {
-    id: "a1000000-0000-4000-8000-000000000001",
-    sku: "SAL-SHP-001",
-    name: "Moisturizing Shampoo",
-    altNames: ["Hydrating Shampoo", "Daily Shampoo"],
-    description: "Gentle moisturizing shampoo for dry and damaged hair. 250ml.",
-    stock: 45,
-    status: "ACTIVE",
-    price: 1850,
-    compareAt: 2200,
-    brand: "Salon Essentials",
-    model: "Hydrate 250",
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000001",
-        url: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000001",
-      },
-      {
-        id: "b1000000-0000-4000-8000-000000000002",
-        url: sampleVideo,
-        type: "VIDEO",
-        productId: "a1000000-0000-4000-8000-000000000001",
-      },
-    ],
-  },
-  {
-    id: "a1000000-0000-4000-8000-000000000002",
-    sku: "SAL-CON-002",
-    name: "Repair Conditioner",
-    altNames: ["Hair Conditioner"],
-    description: "Conditioner that softens hair and helps reduce tangles. 250ml.",
-    stock: 32,
-    status: "ACTIVE",
-    price: 2100,
-    compareAt: null,
-    brand: "Salon Essentials",
-    model: "Repair 250",
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000003",
-        url: "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000002",
-      },
-    ],
-  },
-  {
-    id: "a1000000-0000-4000-8000-000000000003",
-    sku: "SAL-SER-003",
-    name: "Smoothing Hair Serum",
-    altNames: ["Anti-Frizz Serum", "Hair Serum"],
-    description: "Lightweight finishing serum for smooth, shiny hair. 100ml.",
-    stock: 18,
-    status: "ACTIVE",
-    price: 2750,
-    compareAt: 3200,
-    brand: "Glow Professional",
-    model: "Smooth 100",
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000004",
-        url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000003",
-      },
-      {
-        id: "b1000000-0000-4000-8000-000000000005",
-        url: sampleVideo,
-        type: "VIDEO",
-        productId: "a1000000-0000-4000-8000-000000000003",
-      },
-    ],
-  },
-  {
-    id: "a1000000-0000-4000-8000-000000000004",
-    sku: "SAL-CRM-004",
-    name: "Daily Face Moisturizer",
-    altNames: ["Face Cream", "Moisturizer"],
-    description: "Lightweight daily moisturizer for soft and hydrated skin. 50ml.",
-    stock: 24,
-    status: "ACTIVE",
-    price: 1650,
-    compareAt: 1900,
-    brand: "Glow Professional",
-    model: null,
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000006",
-        url: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000004",
-      },
-    ],
-  },
-  {
-    id: "a1000000-0000-4000-8000-000000000005",
-    sku: "SAL-OIL-005",
-    name: "Nourishing Hair Oil",
-    altNames: ["Hair Oil", "Scalp Oil"],
-    description: "Nourishing oil for scalp massage and hair care. 100ml.",
-    stock: 0,
-    status: "ACTIVE",
-    price: 1450,
-    compareAt: null,
-    brand: "Botanical Care",
-    model: "Nourish 100",
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000007",
-        url: "https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000005",
-      },
-    ],
-  },
-  {
-    id: "a1000000-0000-4000-8000-000000000006",
-    sku: "SAL-MSK-006",
-    name: "Deep Conditioning Hair Mask",
-    altNames: ["Hair Mask", "Deep Conditioner"],
-    description: "Intensive conditioning treatment for dry hair. 200ml.",
-    stock: 8,
-    status: "ACTIVE",
-    price: 3400,
-    compareAt: 3900,
-    brand: "Salon Essentials",
-    model: "Restore 200",
-    media: [
-      {
-        id: "b1000000-0000-4000-8000-000000000008",
-        url: "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&w=800&q=80",
-        type: "IMAGE",
-        productId: "a1000000-0000-4000-8000-000000000006",
-      },
-      {
-        id: "b1000000-0000-4000-8000-000000000009",
-        url: sampleVideo,
-        type: "VIDEO",
-        productId: "a1000000-0000-4000-8000-000000000006",
-      },
-    ],
-  },
-];
+"https://developer.mozilla.org/shared-assets/videos/flower.mp4";
 
-export default function ProductsPage(){
-        
-    return(
-        <div className="w-full  h-full">
-            {
-                products.map(
+export default function ProductsPage() {
+	const [products, setProducts] = useState([]);
+	const parameters = useSearchParams();
+	const currentPage = Number(parameters.get("pageNumber") || 1);
+	const pageSize = Number(parameters.get("pageSize") || 10);
 
-                    (item )=>{
+	const [pagination, setPagination] = useState({
+		pageNumber: currentPage,
+		pageSize,
+		totalCount: 0,
+		totalPages: 0,
+	});
 
-                        return(
-                            <div key={item.id}>
-                                <h1>{item.name}</h1>
-                                <p>{item.description}</p>
-                                <p>Price: {item.price}</p>
-                            </div>
-                        )
-                        
+	console.log(parameters.get("pageSize"));
+	console.log(parameters.get("pageNumber"));
 
-                    }
+	useEffect(() => {
+		api
+			.get("/api/products", {
+				params: {
+					pageNumber: currentPage,
+					pageSize,
+				},
+			})
+			.then((res) => {
+				setProducts(res.data.products);
+				setPagination(res.data.pagination);
+			});
+	}, [currentPage, pageSize]);
 
-                )
-            }
-        </div>
-    )
+	const pageHref = (pageNumber: number) =>
+		`/dashboard/products?pageSize=${pageSize}&pageNumber=${pageNumber}`;
+
+	const visiblePages = Array.from(
+		{ length: pagination.totalPages },
+		(_, index) => index + 1,
+	).filter(
+		(page) =>
+			page === 1 ||
+			page === pagination.totalPages ||
+			Math.abs(page - currentPage) <= 1,
+	);
+
+	return (
+		<div className="w-full h-full space-y-5">
+			<div className="w-full overflow-x-auto rounded-lg border bg-background">
+				<Table className="min-w-[1100px]">
+					<TableCaption className="py-4 text-sm text-muted-foreground">
+						A list of your recent invoices.
+					</TableCaption>
+					<TableHeader className="bg-muted/50">
+						<TableRow className="hover:bg-muted/50">
+							<TableHead className="w-20"></TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">SKU</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Name</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Stock</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Status</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Price</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Compare At</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Brand</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Model</TableHead>
+							<TableHead className="text-xs font-semibold uppercase tracking-wide">Actions</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{products.map((item) => {
+							return (
+								<TableRow
+									key={item.id}
+									className="transition-colors hover:bg-muted/40"
+								>
+									<TableCell className="py-3">
+										<img
+											src={item.media[0].url}
+											alt={item.name}
+											className="aspect-square w-12 rounded-md border object-cover"
+										/>
+										{/* <Image
+                   src={item.media[0].url}
+                   alt={item.name}
+                   width={48}
+                   height={48}
+                   className="rounded-full"
+                 /> */}
+									</TableCell>
+									<TableCell className="whitespace-nowrap font-mono text-sm">{item.sku}</TableCell>
+									<TableCell className="font-medium">{item.name}</TableCell>
+									<TableCell>{item.stock}</TableCell>
+									<TableCell>{item.status}</TableCell>
+									<TableCell>{item.price}</TableCell>
+									<TableCell>{item.compareAt}</TableCell>
+									<TableCell>{item.brand}</TableCell>
+									<TableCell>{item.model}</TableCell>
+									<TableCell></TableCell>
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</div>
+
+			<Pagination>
+				<PaginationContent>
+					<PaginationItem>
+						<PaginationPrevious
+							href={pageHref(Math.max(1, currentPage - 1))}
+							aria-disabled={currentPage <= 1}
+							tabIndex={currentPage <= 1 ? -1 : undefined}
+							className={
+								currentPage <= 1
+									? "pointer-events-none opacity-50"
+									: undefined
+							}
+						/>
+					</PaginationItem>
+
+					{visiblePages.map((page, index) => (
+						<>
+							{index > 0 && page - visiblePages[index - 1] > 1 && (
+								<PaginationItem key={`ellipsis-${page}`}>
+									<PaginationEllipsis />
+								</PaginationItem>
+							)}
+							<PaginationItem key={page}>
+								<PaginationLink
+									href={pageHref(page)}
+									isActive={page === currentPage}
+									aria-current={page === currentPage ? "page" : undefined}
+								>
+									{page}
+								</PaginationLink>
+							</PaginationItem>
+						</>
+					))}
+
+					<PaginationItem>
+						<PaginationNext
+							href={pageHref(
+								Math.min(pagination.totalPages, currentPage + 1),
+							)}
+							aria-disabled={
+								pagination.totalPages === 0 ||
+								currentPage >= pagination.totalPages
+							}
+							tabIndex={
+								pagination.totalPages === 0 ||
+								currentPage >= pagination.totalPages
+									? -1
+									: undefined
+							}
+							className={
+								pagination.totalPages === 0 ||
+								currentPage >= pagination.totalPages
+									? "pointer-events-none opacity-50"
+									: undefined
+							}
+						/>
+					</PaginationItem>
+				</PaginationContent>
+			</Pagination>
+		</div>
+	);
 }
